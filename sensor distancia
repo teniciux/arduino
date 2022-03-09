@@ -1,0 +1,77 @@
+/*
+ 
+Sensor de Distância com arduino
+ 
+*/
+ 
+//Declaração da biblioteca para utilização do sensor de distância ultrassonico hc-sr04
+ 
+#include <Ultrasonic.h>
+ 
+//Define os pinos para o trigger e echo
+ 
+int pino_trigger = 9;
+ 
+int pino_echo = 8;
+ 
+//Define o pino para ligar o led
+ 
+int pino_led = 10;
+ 
+//Define o pino para ligar o buzzer
+ 
+int pino_buzzer = 2;
+ 
+//Distância
+ 
+int distancia = 15;
+ 
+//Inicializa o sensor nos pinos definidos acima
+ 
+Ultrasonic ultrasonic(pino_trigger, pino_echo);
+ 
+void setup()
+ 
+{
+ 
+Serial.begin(9600); //Define a taxa de dados em bits por segundo
+ 
+Serial.println("Lendo dados do sensor..."); //Escrevendo no serial monitor
+ 
+pinMode(pino_buzzer, OUTPUT); //Define o pino digital do buzzer como saída
+ 
+}
+ 
+void loop()
+ 
+{
+ 
+// Verifica se a distância é menor que 15 centímetros
+ 
+if(ultrasonic.distanceRead() < distancia){
+ 
+//menor que 15 centímetros
+ 
+digitalWrite(pino_led, HIGH); // Acende o led
+ 
+tone(pino_buzzer, 4500); // Valor do tom sonoro, pode ser modificado
+ 
+}else{
+ 
+//maior que 15 centímetros
+ 
+digitalWrite(pino_led, LOW); // Apaga o led
+ 
+noTone(pino_buzzer); // Desliga o buzzer
+ 
+}
+ 
+//Escrevendo no serial monitor
+ 
+Serial.print("Distancia em cm: ");
+ 
+Serial.println(ultrasonic.distanceRead());
+ 
+delay(1000); //Espera 1 segundo para escrever a distância no serial monitor
+ 
+}
